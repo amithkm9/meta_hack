@@ -1,0 +1,131 @@
+[
+  {
+    "id": "easy_remediate_handshape",
+    "difficulty": "easy",
+    "learner": {
+      "age_band": "8-10",
+      "proficiency": "beginner",
+      "primary_language": "ASL",
+      "support_needs": ["visual_scaffold"]
+    },
+    "lesson_goal": {
+      "target_sign": "HELLO",
+      "description": "Learner can produce the sign HELLO with correct open-palm handshape and wave movement.",
+      "prerequisite_signs": []
+    },
+    "error_patterns": [
+      {
+        "error_type": "handshape",
+        "severity": 0.7,
+        "description": "Learner curls fingers instead of using a flat open palm."
+      }
+    ],
+    "constraints": {
+      "max_steps": 6,
+      "required_outputs": ["corrective_intervention", "assessment"]
+    },
+    "requirements": [
+      {"name": "corrective_intervention", "description": "Provide at least one intervention targeting the handshape error."},
+      {"name": "assessment", "description": "Include a quick assessment to verify learner improvement."}
+    ],
+    "grader_params": {
+      "required_coverage": ["has_visual_cue", "has_assessment"],
+      "ideal_action_order": ["add_location_cue", "slow_motion_demo", "generate_micro_drill", "quick_assessment", "finalize_plan"],
+      "min_actions": 2,
+      "required_error_coverage": ["handshape"]
+    }
+  },
+  {
+    "id": "medium_fix_movement_with_scaffold",
+    "difficulty": "medium",
+    "learner": {
+      "age_band": "11-14",
+      "proficiency": "intermediate",
+      "primary_language": "ASL",
+      "support_needs": ["pacing", "repetition"]
+    },
+    "lesson_goal": {
+      "target_sign": "THANK-YOU",
+      "description": "Learner can produce THANK-YOU with correct chin-touch start and outward movement arc.",
+      "prerequisite_signs": ["PLEASE"]
+    },
+    "error_patterns": [
+      {
+        "error_type": "movement",
+        "severity": 0.8,
+        "description": "Learner moves hand straight forward instead of in an arc."
+      },
+      {
+        "error_type": "timing",
+        "severity": 0.5,
+        "description": "Movement is rushed; lacks smooth pacing."
+      }
+    ],
+    "constraints": {
+      "max_steps": 8,
+      "required_outputs": ["scaffolded_sequence", "timing_support", "drill", "assessment"]
+    },
+    "requirements": [
+      {"name": "scaffolded_sequence", "description": "Build a scaffolded tutoring sequence addressing movement."},
+      {"name": "timing_support", "description": "Include timing or pacing support."},
+      {"name": "drill", "description": "Provide a micro-drill for practice."},
+      {"name": "assessment", "description": "Include assessment to check progress."}
+    ],
+    "grader_params": {
+      "required_coverage": ["has_timing_support", "has_movement_hint", "has_drill", "has_assessment"],
+      "ideal_action_order": ["select_prerequisite_sign", "slow_motion_demo", "add_movement_hint", "generate_micro_drill", "quick_assessment", "finalize_plan"],
+      "min_actions": 4,
+      "required_error_coverage": ["movement", "timing"]
+    }
+  },
+  {
+    "id": "hard_adaptive_multi_error_plan",
+    "difficulty": "hard",
+    "learner": {
+      "age_band": "6-8",
+      "proficiency": "beginner",
+      "primary_language": "ASL",
+      "support_needs": ["visual_scaffold", "attention_support", "pacing"]
+    },
+    "lesson_goal": {
+      "target_sign": "FAMILY",
+      "description": "Learner can produce the sign FAMILY with correct F-handshape, circular movement, and appropriate spatial location.",
+      "prerequisite_signs": ["MOTHER", "FATHER"]
+    },
+    "error_patterns": [
+      {
+        "error_type": "movement",
+        "severity": 0.9,
+        "description": "Circular motion is incomplete; learner makes a half-circle only."
+      },
+      {
+        "error_type": "location",
+        "severity": 0.7,
+        "description": "Sign is produced too low; should be at chest height."
+      },
+      {
+        "error_type": "handshape",
+        "severity": 0.5,
+        "description": "Fingers are not fully touching thumb in the F-handshape."
+      }
+    ],
+    "constraints": {
+      "max_steps": 10,
+      "required_outputs": ["prerequisite_review", "location_cue", "movement_support", "drill", "assessment", "revision"]
+    },
+    "requirements": [
+      {"name": "prerequisite_review", "description": "Review prerequisite signs MOTHER and FATHER before introducing FAMILY."},
+      {"name": "location_cue", "description": "Provide a spatial location cue for chest-height positioning."},
+      {"name": "movement_support", "description": "Provide movement or timing support for circular motion."},
+      {"name": "drill", "description": "Include a focused micro-drill."},
+      {"name": "assessment", "description": "Include a quick assessment checkpoint."},
+      {"name": "revision", "description": "Include a revision loop to reinforce corrections."}
+    ],
+    "grader_params": {
+      "required_coverage": ["has_prerequisite", "has_visual_cue", "has_timing_support", "has_movement_hint", "has_drill", "has_assessment", "has_revision"],
+      "ideal_action_order": ["select_prerequisite_sign", "add_location_cue", "slow_motion_demo", "add_movement_hint", "generate_micro_drill", "choose_feedback_style", "quick_assessment", "revision_loop", "finalize_plan"],
+      "min_actions": 6,
+      "required_error_coverage": ["movement", "location", "handshape"]
+    }
+  }
+]
