@@ -32,7 +32,47 @@
       "required_coverage": ["has_visual_cue", "has_assessment"],
       "ideal_action_order": ["add_location_cue", "slow_motion_demo", "generate_micro_drill", "quick_assessment", "finalize_plan"],
       "min_actions": 2,
-      "required_error_coverage": ["handshape"]
+      "required_error_coverage": ["handshape"],
+      "prerequisite_before_drill": false,
+      "assessment_before_revision": false
+    }
+  },
+  {
+    "id": "easy_fix_orientation",
+    "difficulty": "easy",
+    "learner": {
+      "age_band": "10-12",
+      "proficiency": "beginner",
+      "primary_language": "ASL",
+      "support_needs": ["motivational"]
+    },
+    "lesson_goal": {
+      "target_sign": "PLEASE",
+      "description": "Learner can produce PLEASE with correct palm orientation (flat hand, circular motion on chest).",
+      "prerequisite_signs": []
+    },
+    "error_patterns": [
+      {
+        "error_type": "orientation",
+        "severity": 0.6,
+        "description": "Learner rotates palm outward instead of placing flat against chest."
+      }
+    ],
+    "constraints": {
+      "max_steps": 5,
+      "required_outputs": ["corrective_intervention", "assessment"]
+    },
+    "requirements": [
+      {"name": "corrective_intervention", "description": "Provide an intervention addressing the orientation error."},
+      {"name": "assessment", "description": "Include a quick assessment of progress."}
+    ],
+    "grader_params": {
+      "required_coverage": ["has_visual_cue", "has_drill", "has_assessment"],
+      "ideal_action_order": ["slow_motion_demo", "add_location_cue", "generate_micro_drill", "quick_assessment", "finalize_plan"],
+      "min_actions": 3,
+      "required_error_coverage": ["orientation"],
+      "prerequisite_before_drill": false,
+      "assessment_before_revision": false
     }
   },
   {
@@ -75,7 +115,9 @@
       "required_coverage": ["has_timing_support", "has_movement_hint", "has_drill", "has_assessment"],
       "ideal_action_order": ["select_prerequisite_sign", "slow_motion_demo", "add_movement_hint", "generate_micro_drill", "quick_assessment", "finalize_plan"],
       "min_actions": 4,
-      "required_error_coverage": ["movement", "timing"]
+      "required_error_coverage": ["movement", "timing"],
+      "prerequisite_before_drill": true,
+      "assessment_before_revision": false
     }
   },
   {
@@ -124,8 +166,69 @@
     "grader_params": {
       "required_coverage": ["has_prerequisite", "has_visual_cue", "has_timing_support", "has_movement_hint", "has_drill", "has_assessment", "has_revision"],
       "ideal_action_order": ["select_prerequisite_sign", "add_location_cue", "slow_motion_demo", "add_movement_hint", "generate_micro_drill", "choose_feedback_style", "quick_assessment", "revision_loop", "finalize_plan"],
-      "min_actions": 6,
-      "required_error_coverage": ["movement", "location", "handshape"]
+      "min_actions": 7,
+      "required_error_coverage": ["movement", "location", "handshape"],
+      "prerequisite_before_drill": true,
+      "assessment_before_revision": true
+    }
+  },
+  {
+    "id": "hard_complex_sentence_tutoring",
+    "difficulty": "hard",
+    "learner": {
+      "age_band": "5-7",
+      "proficiency": "beginner",
+      "primary_language": "ASL",
+      "support_needs": ["visual_scaffold", "pacing", "attention_support", "repetition"]
+    },
+    "lesson_goal": {
+      "target_sign": "WANT",
+      "description": "Learner can produce the sign WANT with correct open-claw handshape pulling inward toward body with appropriate timing.",
+      "prerequisite_signs": ["MORE", "PLEASE"]
+    },
+    "error_patterns": [
+      {
+        "error_type": "handshape",
+        "severity": 0.8,
+        "description": "Fingers are flat instead of forming claw shape."
+      },
+      {
+        "error_type": "movement",
+        "severity": 0.85,
+        "description": "Hands push outward instead of pulling inward."
+      },
+      {
+        "error_type": "timing",
+        "severity": 0.7,
+        "description": "Movement is jerky and lacks the smooth pull motion."
+      },
+      {
+        "error_type": "location",
+        "severity": 0.4,
+        "description": "Starting position is too far from body midline."
+      }
+    ],
+    "constraints": {
+      "max_steps": 10,
+      "required_outputs": ["prerequisite_review", "location_cue", "movement_support", "timing_support", "drill", "feedback_selection", "assessment", "revision"]
+    },
+    "requirements": [
+      {"name": "prerequisite_review", "description": "Review prerequisite signs before target."},
+      {"name": "location_cue", "description": "Provide spatial location guidance."},
+      {"name": "movement_support", "description": "Address the inward-pull movement error."},
+      {"name": "timing_support", "description": "Address the jerky timing issue."},
+      {"name": "drill", "description": "Provide focused drill practice."},
+      {"name": "feedback_selection", "description": "Select appropriate feedback modality for attention needs."},
+      {"name": "assessment", "description": "Checkpoint learner progress."},
+      {"name": "revision", "description": "Reinforce corrections with revision."}
+    ],
+    "grader_params": {
+      "required_coverage": ["has_prerequisite", "has_visual_cue", "has_timing_support", "has_movement_hint", "has_feedback_style", "has_drill", "has_assessment", "has_revision"],
+      "ideal_action_order": ["select_prerequisite_sign", "slow_motion_demo", "add_location_cue", "add_movement_hint", "choose_feedback_style", "generate_micro_drill", "quick_assessment", "revision_loop", "finalize_plan"],
+      "min_actions": 8,
+      "required_error_coverage": ["handshape", "movement", "timing", "location"],
+      "prerequisite_before_drill": true,
+      "assessment_before_revision": true
     }
   }
 ]

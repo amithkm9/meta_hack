@@ -17,6 +17,13 @@ def _load() -> list[TaskSpec]:
     return _CACHE
 
 
+def reload_tasks() -> list[TaskSpec]:
+    """Force-reload tasks from disk (useful for testing)."""
+    global _CACHE
+    _CACHE = None
+    return _load()
+
+
 def list_tasks() -> list[TaskSpec]:
     return _load()
 
@@ -24,9 +31,9 @@ def list_tasks() -> list[TaskSpec]:
 def get_task(task_id: str) -> TaskSpec:
     for t in _load():
         if t.id == task_id:
-            return t
+            return t.model_copy(deep=True)
     raise ValueError(f"Unknown task_id: {task_id}")
 
 
 def sample_task() -> TaskSpec:
-    return _load()[0]
+    return _load()[0].model_copy(deep=True)

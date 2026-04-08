@@ -8,13 +8,14 @@ from app.models import (
     ActionType,
     CoverageFlags,
     GradeReport,
+    LearnerState,
     Observation,
     ResetResponse,
     StateResponse,
     StepResult,
     TaskSpec,
 )
-from app.reward import compute_step_reward, get_coverage_flag
+from app.reward import compute_step_reward, get_coverage_flag, update_learner_state
 from app.tasks import get_task, list_tasks, sample_task
 
 
@@ -33,8 +34,7 @@ class SignAdaptEnv:
         self._completed_requirements: list[str] = []
         self._last_action_result: str | None = None
         self._final_grade: GradeReport | None = None
-
-    # ── public interface ───────────────────────────────────────────────
+        self._learner_state: LearnerState = LearnerState()
 
     def reset(self, task_id: str | None = None) -> ResetResponse:
         if task_id:
@@ -53,6 +53,20 @@ class SignAdaptEnv:
         self._last_action_result = None
         self._final_grade = None
 
+        base_frustration = {"easy": 0.15, "medium": 0.25, "hard": 0.35}.get(
+            self._task.difficulty.value, 0.2
+        )
+        base_comprehension = {"easy": 0.15, "medium": 0.10, "hard": 0.05}.get(
+            self._task.difficulty.value, 0.1
+        )
+        self._learner_state = LearnerState(
+            confidence=0.3,
+            comprehension=base_comprehension,
+            frustration=base_frustration,
+            engagement=0.5,
+            error_reduction=0.0,
+        )
+
         return ResetResponse(
             episode_id=self._episode_id,
             observation=self._build_observation(),
@@ -67,6 +81,7 @@ class SignAdaptEnv:
 
         self._step_count += 1
         at = action.action_type
+        is_duplicate = at.value in self._action_history
 
         # Update coverage
         flag = get_coverage_flag(at)
@@ -76,7 +91,12 @@ class SignAdaptEnv:
         # Update requirements
         self._update_requirements(at)
 
-        # Build action description for plan
+        # Update learner state
+        self._learner_state = update_learner_state(
+            self._learner_state, at, is_duplicate
+        )
+
+        # Build plan entry
         desc = f"{at.value}"
         if action.rationale:
             desc += f" — {action.rationale}"
@@ -104,6 +124,7 @@ class SignAdaptEnv:
                 self._action_history,
                 self._coverage,
                 self._step_count,
+                self._learner_state,
             )
 
         obs = self._build_observation()
@@ -132,8 +153,6 @@ class SignAdaptEnv:
             final_grade=self._final_grade,
         )
 
-    # ── internal helpers ───────────────────────────────────────────────
-
     def _build_observation(self) -> Observation:
         task = self._task
         assert task is not None
@@ -152,6 +171,7 @@ class SignAdaptEnv:
             tutoring_plan=list(self._tutoring_plan),
             completed_requirements=list(self._completed_requirements),
             coverage=self._coverage.model_copy(),
+            learner_state=self._learner_state.model_copy(),
             remaining_steps=max(remaining, 0),
             allowed_actions=allowed,
             last_action_result=self._last_action_result,
@@ -180,6 +200,7 @@ class SignAdaptEnv:
             ActionType.SLOW_MOTION_DEMO.value,
         },
         "revision": {ActionType.REVISION_LOOP.value},
+        "feedback_selection": {ActionType.CHOOSE_FEEDBACK_STYLE.value},
     }
 
     def _update_requirements(self, at: ActionType) -> None:

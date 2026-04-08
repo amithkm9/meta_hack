@@ -20,7 +20,7 @@ _env = SignAdaptEnv()
 
 @router.get("/health")
 def health() -> dict:
-    return {"status": "ok"}
+    return {"status": "healthy"}
 
 
 @router.get("/tasks", response_model=list[TaskSummary])

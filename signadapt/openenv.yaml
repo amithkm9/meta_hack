@@ -1,11 +1,12 @@
-name: SignAdapt
+name: signadapt
 version: "1.0.0"
 description: >
   Adaptive Sign-Language Tutoring Environment.
   An OpenEnv-style environment where an AI agent plans sequential tutoring
   interventions for deaf or hard-of-hearing learners practicing sign language.
   The agent receives a learner profile, lesson goal, observed error patterns,
-  and must produce a structured, adaptive tutoring plan within a step budget.
+  a simulated learner cognitive state, and must produce a structured, adaptive
+  tutoring plan within a step budget.
 
 author: SignAdapt Team
 license: MIT
@@ -28,6 +29,10 @@ tasks:
     difficulty: easy
     description: Single-sign remediation for one learner handshape issue.
     max_steps: 6
+  - id: easy_fix_orientation
+    difficulty: easy
+    description: Correct palm orientation for the sign PLEASE.
+    max_steps: 5
   - id: medium_fix_movement_with_scaffold
     difficulty: medium
     description: Short adaptive tutoring sequence addressing movement and timing.
@@ -36,16 +41,22 @@ tasks:
     difficulty: hard
     description: Multi-step tutoring plan with mixed error patterns and tight budget.
     max_steps: 10
+  - id: hard_complex_sentence_tutoring
+    difficulty: hard
+    description: Complex tutoring plan for 4 error types with all support needs active.
+    max_steps: 10
 
 grading:
   score_range: [0.0, 1.0]
   pass_threshold: 0.70
+  deterministic: true
   components:
-    - intervention_relevance (0.25)
-    - pedagogical_sequence (0.25)
-    - learner_need_alignment (0.20)
+    - intervention_relevance (0.20)
+    - pedagogical_sequence (0.20)
+    - learner_need_alignment (0.15)
     - task_completeness (0.20)
     - efficiency (0.10)
+    - learner_state_quality (0.15)
 
 deployment:
   platform: huggingface_spaces

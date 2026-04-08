@@ -81,6 +81,17 @@ class TutoringRequirement(BaseModel):
     met: bool = False
 
 
+# ── Learner State Simulation ──────────────────────────────────────────
+
+class LearnerState(BaseModel):
+    """Simulated learner cognitive/affective state that changes with actions."""
+    confidence: float = Field(default=0.3, ge=0.0, le=1.0)
+    comprehension: float = Field(default=0.1, ge=0.0, le=1.0)
+    frustration: float = Field(default=0.2, ge=0.0, le=1.0)
+    engagement: float = Field(default=0.5, ge=0.0, le=1.0)
+    error_reduction: float = Field(default=0.0, ge=0.0, le=1.0)
+
+
 # ── Observation / Action ───────────────────────────────────────────────
 
 class CoverageFlags(BaseModel):
@@ -104,6 +115,7 @@ class Observation(BaseModel):
     tutoring_plan: list[str] = Field(default_factory=list)
     completed_requirements: list[str] = Field(default_factory=list)
     coverage: CoverageFlags = Field(default_factory=CoverageFlags)
+    learner_state: LearnerState = Field(default_factory=LearnerState)
     remaining_steps: int
     allowed_actions: list[ActionType]
     last_action_result: str | None = None
@@ -124,6 +136,7 @@ class RewardBreakdown(BaseModel):
     learner_need_alignment: float = 0.0
     task_completeness: float = 0.0
     efficiency: float = 0.0
+    learner_state_quality: float = 0.0
     total: float = 0.0
 
 
@@ -149,6 +162,8 @@ class GraderParams(BaseModel):
     ideal_action_order: list[str] = Field(default_factory=list)
     min_actions: int = 1
     required_error_coverage: list[str] = Field(default_factory=list)
+    prerequisite_before_drill: bool = False
+    assessment_before_revision: bool = False
 
 
 class TaskSpec(BaseModel):
@@ -166,6 +181,7 @@ class TaskSpec(BaseModel):
 
 class ResetRequest(BaseModel):
     task_id: str | None = None
+    seed: int | None = None
 
 
 class ResetResponse(BaseModel):
